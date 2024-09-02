@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollageControllers", "CollageAPI\CollageControllers\CollageControllers.csproj", "{5263B950-92C9-413E-A6AB-927F7F5241E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuisnessLayer", "CollageAPI\BuisnessLayer\BuisnessLayer.csproj", "{406EE5FA-88E1-478C-A0A2-81B172D0E31A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "CollageAPI\DataLayer\DataLayer.csproj", "{30F6B120-A16C-44AC-909C-F8A4B381573E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5263B950-92C9-413E-A6AB-927F7F5241E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5263B950-92C9-413E-A6AB-927F7F5241E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5263B950-92C9-413E-A6AB-927F7F5241E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5263B950-92C9-413E-A6AB-927F7F5241E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{406EE5FA-88E1-478C-A0A2-81B172D0E31A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406EE5FA-88E1-478C-A0A2-81B172D0E31A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406EE5FA-88E1-478C-A0A2-81B172D0E31A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406EE5FA-88E1-478C-A0A2-81B172D0E31A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30F6B120-A16C-44AC-909C-F8A4B381573E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30F6B120-A16C-44AC-909C-F8A4B381573E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30F6B120-A16C-44AC-909C-F8A4B381573E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30F6B120-A16C-44AC-909C-F8A4B381573E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B93D112-77D6-4899-9C24-87C1F7257D2B}
+	EndGlobalSection
+EndGlobal

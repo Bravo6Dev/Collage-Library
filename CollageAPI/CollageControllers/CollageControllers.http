@@ -1,0 +1,6 @@
+@CollageControllers_HostAddress = http://localhost:5211
+
+GET {{CollageControllers_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

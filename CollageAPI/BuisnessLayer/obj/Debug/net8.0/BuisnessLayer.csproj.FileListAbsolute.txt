@@ -1,0 +1,15 @@
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\bin\Debug\net8.0\BuisnessLayer.deps.json
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\bin\Debug\net8.0\BuisnessLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\bin\Debug\net8.0\BuisnessLayer.pdb
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\bin\Debug\net8.0\DataLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\bin\Debug\net8.0\DataLayer.pdb
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.csproj.AssemblyReference.cache
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.AssemblyInfoInputs.cache
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.AssemblyInfo.cs
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.csproj.CopyComplete
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\refint\BuisnessLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.pdb
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\ref\BuisnessLayer.dll
