@@ -13,3 +13,4 @@ C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Deb
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\refint\BuisnessLayer.dll
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.pdb
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\ref\BuisnessLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\BuisnessLayer\obj\Debug\net8.0\BuisnessLayer.sourcelink.json

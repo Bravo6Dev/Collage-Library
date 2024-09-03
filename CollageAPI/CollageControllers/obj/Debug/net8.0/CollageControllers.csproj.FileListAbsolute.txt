@@ -139,3 +139,4 @@ C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\CollageControllers\ob
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\CollageControllers\obj\Debug\net8.0\CollageControllers.pdb
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\CollageControllers\obj\Debug\net8.0\CollageControllers.genruntimeconfig.cache
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\CollageControllers\obj\Debug\net8.0\ref\CollageControllers.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\CollageControllers\obj\Debug\net8.0\CollageControllers.sourcelink.json

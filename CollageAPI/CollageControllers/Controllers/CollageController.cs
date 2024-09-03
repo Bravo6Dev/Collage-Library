@@ -81,15 +81,13 @@ namespace CollageControllers.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult AddNew(CollagesEF Collage)
         {
-            if (Collage is null)
-                return BadRequest();
             if (_CollageService.Save(Collage, enMode.AddNew))
-                return Ok("Collage has been created");
+                return NoContent();
             else
                 return BadRequest("Faild to add new collage");
         }
 
-        [HttpPost("Update", Order = 5)]
+        [HttpPut("Update", Order = 5)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -104,7 +102,7 @@ namespace CollageControllers.Controllers
                     return BadRequest("Collage argument is null");
                 Collage.CollageName = CollageArg.CollageName;
                 if (_CollageService.Save(Collage, enMode.Update))
-                    return Ok("Collage has been updated");
+                    return NoContent();
                 else
                     return BadRequest("Faild to update collage");
             }

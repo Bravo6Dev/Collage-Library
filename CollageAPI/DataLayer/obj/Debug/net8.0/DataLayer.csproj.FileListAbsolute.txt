@@ -26,3 +26,4 @@ C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\DataLayer\obj\Debug\n
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\DataLayer\obj\Debug\net8.0\DataLayer.pdb
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\DataLayer\obj\Debug\net8.0\DataLayer.genruntimeconfig.cache
 C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\DataLayer\obj\Debug\net8.0\ref\DataLayer.dll
+C:\Users\DELL\Desktop\Projects\APIs\Collage-Web\CollageAPI\DataLayer\obj\Debug\net8.0\DataLayer.sourcelink.json
