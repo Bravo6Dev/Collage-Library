@@ -98,8 +98,6 @@ namespace CollageControllers.Controllers
                 CollagesEF Collage = _CollageService.GetById(Id);
                 if (Collage is null)
                     return NotFound("Collage not found");
-                if (CollageArg is null)
-                    return BadRequest("Collage argument is null");
                 Collage.CollageName = CollageArg.CollageName;
                 if (_CollageService.Save(Collage, enMode.Update))
                     return NoContent();

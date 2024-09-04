@@ -14,6 +14,5 @@ namespace DataLayer.Reposertory
         public IEnumerable <SpecialtiesEF> GetAll();
         public IEnumerable<SpecialtiesEF> GetAll(int CollageId);
         public SpecialtiesEF GetById(int Id);
-        public SpecialtiesEF GetByName(string Name);
     }
 }

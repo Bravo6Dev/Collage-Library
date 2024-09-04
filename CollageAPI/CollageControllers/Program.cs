@@ -20,6 +20,7 @@ namespace CollageControllers
 
             builder.Services.AddScoped<ICollageRepo, CollageServices>();
             builder.Services.AddScoped<ISpecialtiesRepo, SpecialtiesService>();
+            builder.Services.AddScoped<ISemestersRepo, SemestersService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

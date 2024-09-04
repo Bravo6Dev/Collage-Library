@@ -82,19 +82,6 @@ namespace BuisnessLayer
             }
         }
 
-        public SpecialtiesEF GetByName(string Name)
-        {
-            try
-            {
-                return _DbContext.Specialties
-                    .Include(S => S.Collage)
-                    .FirstOrDefault(S => S.SpecialtyName == Name)!;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         public bool Save(SpecialtiesEF Specialty, enMode Mode)
         {

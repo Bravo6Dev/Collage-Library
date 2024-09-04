@@ -12,6 +12,7 @@ namespace DataLayer
     {
         public DbSet<CollagesEF> Collages { get; set; }
         public DbSet<SpecialtiesEF> Specialties { get; set; }
+        public DbSet<SemestersEF> Semesters { get; set; }
 
         public ResourcesDbContext(DbContextOptions<ResourcesDbContext> options)
             : base(options)
