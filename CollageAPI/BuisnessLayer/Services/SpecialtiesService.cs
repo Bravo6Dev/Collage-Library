@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuisnessLayer
+namespace BuisnessLayer.Services
 {
     public class SpecialtiesService : ISpecialtiesRepo
     {
@@ -18,14 +18,15 @@ namespace BuisnessLayer
         public SpecialtiesService(ResourcesDbContext DbContext)
         {
             _DbContext = DbContext;
+            _Specialty = new SpecialtiesEF();
         }
 
         public bool Delete(int Id)
         {
             try
             {
-                 _Specialty = _DbContext.Specialties
-                    .FirstOrDefault(S => S.ID == Id)!;
+                _Specialty = _DbContext.Specialties
+                   .FirstOrDefault(S => S.ID == Id)!;
                 if (_Specialty == null)
                     throw new ArgumentNullException(nameof(_Specialty));
                 _DbContext.Specialties.Remove(_Specialty);
@@ -82,7 +83,6 @@ namespace BuisnessLayer
             }
         }
 
-
         public bool Save(SpecialtiesEF Specialty, enMode Mode)
         {
             if (Specialty is null)
@@ -96,12 +96,15 @@ namespace BuisnessLayer
                 throw new Exception($"There is no collage with {Specialty.CollageID} ID");
 
             _DbContext.Entry(Collage).State = EntityState.Unchanged;
-            Specialty.Collage = Collage;
+
+            _Specialty.SpecialtyName = Specialty.SpecialtyName;
+            _Specialty.CollageID = Specialty.CollageID;
+            _Specialty.Collage = Collage;
 
             if (Mode == enMode.AddNew)
-                _DbContext.Specialties.Add(Specialty);
+                _DbContext.Specialties.Add(_Specialty);
             else
-                _DbContext.Specialties.Update(Specialty);
+                _DbContext.Specialties.Update(_Specialty);
             return _DbContext.SaveChanges() > 0;
         }
     }

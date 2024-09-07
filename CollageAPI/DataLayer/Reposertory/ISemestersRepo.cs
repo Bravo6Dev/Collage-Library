@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Reposertory
 {
-    public interface ISemestersRepo
+    public interface ISemesterRepo
     {
         public bool Save(SemestersEF Semester, enMode Mode);
         public bool Delete(int ID);

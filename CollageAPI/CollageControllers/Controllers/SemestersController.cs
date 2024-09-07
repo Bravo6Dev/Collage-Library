@@ -10,9 +10,9 @@ namespace CollageControllers.Controllers
     [ApiController]
     public class SemestersController : ControllerBase
     {
-        private ISemestersRepo _SemestersService;
+        private ISemesterRepo _SemestersService;
 
-        public SemestersController(ISemestersRepo SemRepo)
+        public SemestersController(ISemesterRepo SemRepo)
         {
             _SemestersService = SemRepo;
         }

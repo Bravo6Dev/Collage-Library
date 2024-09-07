@@ -1,5 +1,4 @@
-
-using BuisnessLayer;
+using BuisnessLayer.Services;
 using DataLayer;
 using DataLayer.Entites;
 using DataLayer.Reposertory;
@@ -20,7 +19,9 @@ namespace CollageControllers
 
             builder.Services.AddScoped<ICollageRepo, CollageServices>();
             builder.Services.AddScoped<ISpecialtiesRepo, SpecialtiesService>();
-            builder.Services.AddScoped<ISemestersRepo, SemestersService>();
+            builder.Services.AddScoped<ISemesterRepo, SemestersService>();
+            builder.Services.AddScoped<ISubjectRepo, SubjectsService>();
+            builder.Services.AddScoped<IReferencesRepo, ReferencesService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

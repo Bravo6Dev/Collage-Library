@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Reposertory
 {
-    public interface ISubjectsRepo
+    public interface ISubjectRepo
     {
         public bool Save(SubjectEF Subject, enMode Mode);
+
         public IEnumerable<SubjectEF> GetSubjects();
         public IEnumerable<SubjectEF> GetSubjects(int SemId);
+
         public SubjectEF GetById(int Id);
+
         public bool Delete(int Id);
     }
 }

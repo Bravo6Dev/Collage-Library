@@ -10,7 +10,7 @@ namespace DataLayer.Entites
     {
         public int ID { get; set; }
         public string SubjectName { get; set; } = null!;
-        public int SemesterId { get; set; }
+        public int SemeseterID { get; set; }
         public SemestersEF Semeseter { get; set; } = null!;
     }
 }

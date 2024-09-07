@@ -8,15 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuisnessLayer
+namespace BuisnessLayer.Services
 {
-    public class SemestersService : ISemestersRepo
+    public class SemestersService : ISemesterRepo
     {
         private readonly ResourcesDbContext _DbContext;
+        private SemestersEF _Semester;
 
         public SemestersService(ResourcesDbContext DbContext)
         {
             _DbContext = DbContext;
+            _Semester = new SemestersEF();
         }
 
         public bool Delete(int ID)
@@ -30,7 +32,7 @@ namespace BuisnessLayer
                 _DbContext.Semesters.Remove(Semester);
                 return _DbContext.SaveChanges() > 0;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -101,7 +103,9 @@ namespace BuisnessLayer
                     throw new NullReferenceException("Specialty not found");
                 _DbContext.Entry(Specialty).State = EntityState.Unchanged;
 
-                Semester.Speicalty = Specialty;
+                _Semester.NumOfSem = Semester.NumOfSem;
+                _Semester.SpeicaltyID = Semester.SpeicaltyID;
+                _Semester.Speicalty = Specialty;
 
                 if (Mode == enMode.AddNew)
                     _DbContext.Semesters.Add(Semester);

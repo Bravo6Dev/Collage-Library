@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuisnessLayer
+namespace BuisnessLayer.Services
 {
     public class CollageServices : ICollageRepo
     {
@@ -18,17 +18,19 @@ namespace BuisnessLayer
         public CollageServices(ResourcesDbContext Context)
         {
             _DbContext = Context;
+            Collage = new CollagesEF();
         }
 
         public bool Save(CollagesEF CollageArg, enMode Mode)
         {
             try
             {
-                Collage = CollageArg;
-                if (Collage is null)
-                    throw new ArgumentNullException(nameof(Collage));
-                if (string.IsNullOrEmpty(Collage.CollageName))
+                if (CollageArg is null)
+                    throw new ArgumentNullException(nameof(CollageArg));
+                if (string.IsNullOrEmpty(CollageArg.CollageName))
                     throw new Exception("Name was empty");
+                Collage.CollageName = CollageArg.CollageName;
+
                 if (Mode == enMode.AddNew)
                     _DbContext.Collages.Add(Collage);
                 else
