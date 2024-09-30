@@ -1,5 +1,6 @@
 ﻿using DataLayer.Entites;
 using DataLayer.Reposertory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CollageControllers.Controllers
 {
+    [Authorize]
     [Route("Collages")]
     [ApiController]
     public class CollageController : ControllerBase
@@ -22,6 +24,7 @@ namespace CollageControllers.Controllers
         [ProducesResponseType(typeof(List<CollagesEF>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult<List<CollagesEF>> GetAll()
         {
             try

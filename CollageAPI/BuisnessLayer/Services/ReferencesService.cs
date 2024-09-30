@@ -1,4 +1,6 @@
-﻿using DataLayer;
+﻿using BuisnessLayer.Mappers;
+using DataLayer;
+using DataLayer.DTOs;
 using DataLayer.Entites;
 using DataLayer.Reposertory;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +22,9 @@ namespace BuisnessLayer.Services
 
         private bool Duplicate(string name)
         {
-            return _DbContext.References.FirstOrDefault(R => R.ReferenceName == name) != null;
+            return _DbContext.References
+                .AsNoTracking()
+                .FirstOrDefault(R => R.ReferenceName == name) != null;
         }
 
         public bool Delete(int ID)
@@ -40,13 +44,14 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public IEnumerable<Ref> GetAll()
+        public IEnumerable<RefDTO> GetAll()
         {
             try
             {
-                return _DbContext.References
+                return RefMapper.GetAllReferences(_DbContext.References
                     .Include(R => R.Subject)
-                    .ToList();
+                    .ThenInclude(S => S.Semeseter)
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -54,14 +59,14 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public IEnumerable<Ref> GetAll(int SubjectId)
+        public IEnumerable<RefDTO> GetAll(int SubjectId)
         {
             try
             {
-                return _DbContext.References
+                return RefMapper.GetAllReferences(_DbContext.References
                     .Where(R => R.SubjectId == SubjectId)
                     .Include(R => R.Subject)
-                    .ToList();
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -69,11 +74,16 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public Ref GetById(int Id)
+        public RefDTO GetById(int Id)
         {
             try
             {
-                return _DbContext.References.FirstOrDefault(R => R.ID == Id);
+                Ref Refe = _DbContext.References
+                    .AsNoTracking()
+                    .Include(R => R.Subject)
+                    .ThenInclude(R => R.Semeseter)
+                    .FirstOrDefault(R => R.ID == Id)!;
+                return RefMapper.ToDTO(Refe);
             }
             catch (Exception ex)
             {
@@ -81,43 +91,32 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public bool Valid(Ref Ref)
+        public bool Valid(RefDTO Ref)
         {
             if (Ref is null)
                 throw new ArgumentNullException("Reference was null");
-            if (string.IsNullOrEmpty(Ref.ReferenceName))
+            if (string.IsNullOrEmpty(Ref.RefName))
                 throw new Exception("Name of reference is null");
-            SubjectEF Subj = _DbContext.Subjects.FirstOrDefault(S => S.ID == Ref.SubjectId)!;
 
-            if (Subj is null)
-                throw new Exception($"Subject with {Ref.SubjectId} ID not found");
-
-            if (Duplicate(Ref.ReferenceName))
-                throw new DuplicateWaitObjectException($"Reference with {Ref.ReferenceName} already exist");
+            if (Duplicate(Ref.RefName))
+                throw new DuplicateWaitObjectException($"Reference with {Ref.RefName} already exist");
 
             return true;
         }
 
-        public bool Save(Ref Ref, enMode Mode)
+        public bool Save(RefDTO Ref, enMode Mode)
         {
-            if (Ref is null)
-                throw new ArgumentNullException("Reference was null");
-            if (string.IsNullOrEmpty(Ref.ReferenceName))
-                throw new Exception("Name of reference is null");
-            SubjectEF Subj = _DbContext.Subjects.FirstOrDefault(S => S.ID == Ref.SubjectId)!;
+            if (!Valid(Ref))
+                return false;
 
-            if (Subj is null)
-                throw new Exception($"Subject with {Ref.SubjectId} ID not found");
+            SubjectEF Subj = _DbContext.Subjects.FirstOrDefault(S => S.ID == Ref.SubId)!;
 
-            if (Duplicate(Ref.ReferenceName))
-                throw new DuplicateWaitObjectException($"Reference with {Ref.ReferenceName} already exist");
+            if (Subj == null)
+                throw new Exception($"Subject with {Ref.SubId} ID not found");
 
             _DbContext.Entry(Subj).State = EntityState.Unchanged;
-            _Ref.ReferenceName = Ref.ReferenceName;
-            _Ref.ReferencePath = Ref.ReferencePath;
-            _Ref.ImagePath = Ref.ImagePath;
-            _Ref.SubjectId = Ref.SubjectId;
-            _Ref.Subject = Subj;
+            _Ref = RefMapper.ToEF(Ref);
+            _DbContext.Entry(_Ref).State = Mode == enMode.AddNew ? EntityState.Added : EntityState.Modified;
 
             if (Mode == enMode.AddNew)
                 _DbContext.References.Add(_Ref);

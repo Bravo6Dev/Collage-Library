@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer.Entites;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DataLayer
 {
-    public class ResourcesDbContext : DbContext
+    public class ResourcesDbContext : IdentityDbContext<AuthUser>
     {
         public DbSet<CollagesEF> Collages { get; set; }
         public DbSet<SpecialtiesEF> Specialties { get; set; }

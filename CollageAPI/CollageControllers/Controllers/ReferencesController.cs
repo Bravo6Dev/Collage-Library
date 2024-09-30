@@ -7,9 +7,12 @@ using System.Security.Cryptography;
 using System.IO;
 
 using Ref = DataLayer.Entites.ReferencesEF;
+using DataLayer.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CollageControllers.Controllers
 {
+    [Authorize]
     [Route("References")]
     [ApiController]
     public class ReferencesController : ControllerBase
@@ -89,9 +92,8 @@ namespace CollageControllers.Controllers
             };
         }
 
-
         [HttpGet("GetAll", Order = 1)]
-        public ActionResult<List<Ref>> GetAll()
+        public ActionResult<List<RefDTO>> GetAll()
         {
             try
             {
@@ -104,7 +106,7 @@ namespace CollageControllers.Controllers
         }
 
         [HttpGet("GetAll/{Subjectid}", Order = 2)]
-        public ActionResult<List<Ref>> GetAll(int SubId)
+        public ActionResult<List<RefDTO>> GetAll(int SubId)
         {
             try
             {
@@ -117,11 +119,11 @@ namespace CollageControllers.Controllers
         }
 
         [HttpGet("{id}", Order = 3)]
-        public ActionResult<Ref> GetById(int Id)
+        public ActionResult<RefDTO> GetById(int Id)
         {
             try
             {
-                throw new NotImplementedException();
+                return _ReferencesService.GetById(Id);
             }
             catch (Exception ex)
             {
@@ -130,7 +132,7 @@ namespace CollageControllers.Controllers
         }
 
         [HttpGet("GetImage/{filename}", Order = 4)]
-        public async Task<ActionResult> GetImage(string filename)
+        public ActionResult GetImage(string filename)
         {
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename was empty");
@@ -142,13 +144,11 @@ namespace CollageControllers.Controllers
             FileStream image = System.IO.File.OpenRead(path);
             string MimeType = GetMimeType(path);
 
-            Response.Headers.Add("Content-Disposition", $"inline; filename={filename}");
-
             return File(image, MimeType);
         }
 
         [HttpPost("AddNew", Order = 5)]
-        public async Task<ActionResult> AddNew([FromForm]Ref Reference, IFormFile ImageFile, IFormFile PdfFile)
+        public async Task<ActionResult> AddNew(IFormFile ImageFile, IFormFile PdfFile, [FromForm]RefDTO Reference)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace CollageControllers.Controllers
                     return BadRequest();
 
                 Reference.ImagePath = await SaveImageController(ImageFile);
-                Reference.ReferencePath = await SavePdfFileController(PdfFile);
+                Reference.RefPath = await SavePdfFileController(PdfFile);
 
                 if (_ReferencesService.Save(Reference, enMode.AddNew))
                     return NoContent();
@@ -169,25 +169,27 @@ namespace CollageControllers.Controllers
             }
         }
 
-        [HttpPost("Update/{id}", Order = 6)]
-        public async Task<ActionResult> UpdateAsync(int Id, Ref ReferenceArg, IFormFile ImageFile, IFormFile PdfFile)
+        [HttpPut("Update/id", Order = 6)]
+        public async Task<ActionResult> UpdateAsync(int Id, [FromForm]RefDTO ReferenceArg, IFormFile ImageFile, IFormFile PdfFile)
         {
             try
             {
                 if (!_ReferencesService.Valid(ReferenceArg))
                     return BadRequest();
-                Ref Reference = _ReferencesService.GetById(Id);
+                RefDTO Reference = _ReferencesService.GetById(Id);
 
-                if (ReferenceArg is null)
+                if (ReferenceArg == null)
                     return BadRequest("Reference object was null");
 
-                if (Reference is null)
+                if (Reference == null)
                     return NotFound();
 
-                ReferenceArg.ImagePath = await SaveImageController(ImageFile);
-                ReferenceArg.ReferencePath = await SavePdfFileController(PdfFile);
+                Reference.RefName = ReferenceArg.RefName;
+                Reference.SubId = ReferenceArg.SubId;
+                Reference.ImagePath = await SaveImageController(ImageFile);
+                Reference.RefPath = await SavePdfFileController(PdfFile);
 
-                if (_ReferencesService.Save(ReferenceArg, enMode.Update))
+                if (_ReferencesService.Save(Reference, enMode.Update))
                     return NoContent();
                 else
                     return BadRequest("Faild to update");
@@ -198,7 +200,7 @@ namespace CollageControllers.Controllers
             }
         }
 
-        [HttpDelete("Delete/{id}", Order = 7)]
+        [HttpDelete("Delete/id", Order = 7)]
         public ActionResult Delete(int Id)
         {
             try
@@ -213,6 +215,5 @@ namespace CollageControllers.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
     }
 }

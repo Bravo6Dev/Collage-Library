@@ -1,4 +1,6 @@
-﻿using DataLayer;
+﻿using BuisnessLayer.Mappers;
+using DataLayer;
+using DataLayer.DTOs;
 using DataLayer.Entites;
 using DataLayer.Reposertory;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +15,17 @@ namespace BuisnessLayer.Services
     public class SemestersService : ISemesterRepo
     {
         private readonly ResourcesDbContext _DbContext;
-        private SemestersEF _Semester;
 
         public SemestersService(ResourcesDbContext DbContext)
         {
             _DbContext = DbContext;
-            _Semester = new SemestersEF();
         }
 
         public bool Delete(int ID)
         {
             try
             {
-                SemestersEF Semester = _DbContext.Semesters
+                 SemestersEF Semester = _DbContext.Semesters
                     .FirstOrDefault(s => s.ID == ID)!;
                 if (Semester is null)
                     throw new Exception("Semester doesn't found");
@@ -38,14 +38,14 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public IEnumerable<SemestersEF> GetAll()
+        public IEnumerable<SemesterDTO> GetAll()
         {
             try
             {
-                return _DbContext.Semesters
+                return SemesterMapper.GetAllSemesters(_DbContext.Semesters
                     .Include(s => s.Speicalty)
                     .ThenInclude(S => S.Collage)
-                    .ToList();
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -53,17 +53,17 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public IEnumerable<SemestersEF> GetAll(int SpecialtyId)
+        public IEnumerable<SemesterDTO> GetAll(int SpecialtyId)
         {
             try
             {
                 if (_DbContext.Specialties.FirstOrDefault(s => s.ID == SpecialtyId) is null)
                     throw new Exception("Specialty not found");
-                return _DbContext.Semesters
+                return SemesterMapper.GetAllSemesters(_DbContext.Semesters
                     .Where(s => s.SpeicaltyID == SpecialtyId)
                     .Include(s => s.Speicalty)
                     .ThenInclude(S => S.Collage)
-                    .ToList();
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -71,14 +71,18 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public SemestersEF GetById(int ID)
+        public SemesterDTO GetById(int ID)
         {
             try
             {
-                return _DbContext.Semesters
+                SemestersEF Sem = _DbContext.Semesters
+                    .AsNoTracking()
                     .Include(s => s.Speicalty)
-                    .ThenInclude(S => S.Collage)
                     .FirstOrDefault(s => s.ID == ID)!;
+                if (Sem == null)
+                    throw new KeyNotFoundException($"Semester with {ID} ID not found");
+
+                return SemesterMapper.ToDTO(Sem);
             }
             catch (Exception ex)
             {
@@ -86,31 +90,31 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public bool Save(SemestersEF Semester, enMode Mode)
+        public bool Save(SemesterDTO Semester, enMode Mode)
         {
             try
             {
-                if (Semester is null)
-                    throw new ArgumentNullException(nameof(Semester));
+                if (Semester == null)
+                    throw new ArgumentNullException("Semester was null");
 
-                if (Semester.NumOfSem < 1)
+                if (Semester.SemNumber < 1)
                     throw new Exception("Number of sem is not valid");
 
                 SpecialtiesEF Specialty = _DbContext.Specialties
-                    .FirstOrDefault(s => s.ID == Semester.SpeicaltyID)!;
+                    .FirstOrDefault(s => s.ID == Semester.SpecId)!;
 
-                if (Specialty is null)
-                    throw new NullReferenceException("Specialty not found");
+                if (Specialty == null)
+                    throw new NullReferenceException($"There is no semester with {Semester.SpecId} ID");
+
                 _DbContext.Entry(Specialty).State = EntityState.Unchanged;
 
-                _Semester.NumOfSem = Semester.NumOfSem;
-                _Semester.SpeicaltyID = Semester.SpeicaltyID;
-                _Semester.Speicalty = Specialty;
+                SemestersEF Sem = SemesterMapper.ToEF(Semester);
+                Sem.Speicalty = Specialty;
 
                 if (Mode == enMode.AddNew)
-                    _DbContext.Semesters.Add(Semester);
+                    _DbContext.Semesters.Add(Sem);
                 else if (Mode == enMode.Update)
-                    _DbContext.Semesters.Update(Semester);
+                    _DbContext.Semesters.Update(Sem);
 
                 return _DbContext.SaveChanges() > 0;
             }

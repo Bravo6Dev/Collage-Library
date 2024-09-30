@@ -1,5 +1,7 @@
-﻿using DataLayer.Entites;
+﻿using DataLayer.DTOs;
+using DataLayer.Entites;
 using DataLayer.Reposertory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +9,7 @@ using System.Data;
 
 namespace CollageControllers.Controllers
 {
+    [Authorize]
     [Route("Subjects")]
     [ApiController]
     public class SubjectsController : ControllerBase
@@ -19,7 +22,7 @@ namespace CollageControllers.Controllers
         }
 
         [HttpGet("GetAll", Order = 1)]
-        public ActionResult<List<SubjectEF>> GetAll()
+        public ActionResult<List<SubjectDTO>> GetAll()
         {
             try
             {
@@ -32,7 +35,7 @@ namespace CollageControllers.Controllers
         }
 
         [HttpGet("GetAll/SemeseterID", Order = 2)]
-        public ActionResult<List<SubjectEF>> GetAll(int SemesterId)
+        public ActionResult<List<SubjectDTO>> GetAll(int SemesterId)
         {
             try
             {
@@ -49,7 +52,7 @@ namespace CollageControllers.Controllers
         {
             try
             {
-                SubjectEF Subject = _SubjectsService.GetById(Id);
+                SubjectDTO Subject = _SubjectsService.GetById(Id);
                 if (Subject is null)
                     return BadRequest($"There is no Subject with {Id} ID");
                 else
@@ -62,7 +65,7 @@ namespace CollageControllers.Controllers
         }
 
         [HttpPost("AddNew", Order = 4)]
-        public ActionResult AddNew(SubjectEF Subject)
+        public ActionResult AddNew(SubjectDTO Subject)
         {
             try
             {
@@ -78,18 +81,19 @@ namespace CollageControllers.Controllers
         }
 
         [HttpPut("Update/id", Order = 5)]
-        public ActionResult Update(int Id, SubjectEF SubjectArg)
+        public ActionResult Update(int Id, SubjectDTO SubjectArg)
         {
             try
             {
-                SubjectEF Subject = _SubjectsService.GetById(Id);
+                SubjectDTO Subject = _SubjectsService.GetById(Id);
 
-                if (Subject is null)
+                if (Subject == null)
                     return BadRequest($"There is no subject with {Id} ID");
-                if (SubjectArg is null)
-                    return BadRequest("Subject Argumant was null");
+                if (SubjectArg == null)
+                    return BadRequest("Subject Argument was null");
+
                 Subject.SubjectName = SubjectArg.SubjectName;
-                Subject.SemeseterID = SubjectArg.SemeseterID;
+                Subject.SemesterId = SubjectArg.SemesterId;
 
                 if (_SubjectsService.Save(Subject, enMode.Update))
                     return NoContent();

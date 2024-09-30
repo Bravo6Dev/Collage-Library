@@ -1,4 +1,5 @@
-﻿using DataLayer.Entites;
+﻿using DataLayer.DTOs;
+using DataLayer.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,15 @@ namespace DataLayer.Reposertory
 {
     public interface IReferencesRepo
     {
-        public bool Save(ReferencesEF Ref, enMode Mode);
+        public bool Save(RefDTO Ref, enMode Mode);
 
-        public IEnumerable<ReferencesEF> GetAll();
-        public IEnumerable<ReferencesEF> GetAll(int SubjectId);
+        public IEnumerable<RefDTO> GetAll();
+        public IEnumerable<RefDTO> GetAll(int SubjectId);
 
-        public ReferencesEF GetById(int Id);
+        public RefDTO GetById(int Id);
 
         public bool Delete(int ID);
 
-        public bool Valid(ReferencesEF Ref);
+        public bool Valid(RefDTO Ref);
     }
 }

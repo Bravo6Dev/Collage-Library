@@ -1,4 +1,5 @@
-﻿using DataLayer;
+﻿using DataLayer.DTOs;
+using DataLayer;
 using DataLayer.Entites;
 using DataLayer.Reposertory;
 using Microsoft.EntityFrameworkCore;
@@ -8,25 +9,27 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BuisnessLayer.Mappers;
 
 namespace BuisnessLayer.Services
 {
     public class SubjectsService : ISubjectRepo
     {
         private readonly ResourcesDbContext _DbContext;
-        private SubjectEF _Subject; 
 
         public SubjectsService(ResourcesDbContext DbContext)
         {
             _DbContext = DbContext;
-            _Subject = new SubjectEF();
         }
 
         private bool Duplicate(string name)
         {
             try
             {
-                return _DbContext.Subjects.FirstOrDefault(S => S.SubjectName == name) != null;
+                return _DbContext.Subjects
+                    .AsNoTracking()
+                    .Select(S => S.SubjectName)
+                    .FirstOrDefault(S => S == name) != null;
             }
             catch (Exception ex)
             {
@@ -38,10 +41,10 @@ namespace BuisnessLayer.Services
         {
             try
             {
-                SubjectEF Subject = _DbContext.Subjects.FirstOrDefault(S => S.ID == Id);
-                if (Subject is null)
+                SubjectEF Sub = _DbContext.Subjects.FirstOrDefault(S => S.ID == Id)!;
+                if (Sub == null)
                     throw new ArgumentNullException("Subject not found");
-                _DbContext.Subjects.Remove(Subject);
+                _DbContext.Subjects.Remove(Sub);
                 return _DbContext.SaveChanges() > 0;
             }
             catch (Exception ex)
@@ -50,20 +53,23 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public SubjectEF GetById(int Id)
+        public SubjectDTO GetById(int Id)
         {
-            return _DbContext.Subjects
+            SubjectEF Sub = _DbContext.Subjects
+                .AsNoTracking()
                 .Include(s => s.Semeseter)
                 .FirstOrDefault(s => s.ID == Id)!;
+            return SubjectMapper.ToDTO(Sub);
         }
 
-        public IEnumerable<SubjectEF> GetSubjects()
+        public IEnumerable<SubjectDTO> GetSubjects()
         {
             try
             {
-                return _DbContext.Subjects
-                    .Include(S => S.Semeseter)
-                    .ToList();
+                return SubjectMapper.GetAllSubjects(
+                    _DbContext.Subjects
+                    .Include(s => s.Semeseter)
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -71,14 +77,15 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public IEnumerable<SubjectEF> GetSubjects(int SemId)
+        public IEnumerable<SubjectDTO> GetSubjects(int SemId)
         {
             try
             {
-                return _DbContext.Subjects
+                return SubjectMapper.GetAllSubjects(
+                    _DbContext.Subjects
                     .Where(S => S.SemeseterID == SemId)
                     .Include(s => s.Semeseter)
-                    .ToList();
+                    .ToList());
             }
             catch (Exception ex)
             {
@@ -86,35 +93,41 @@ namespace BuisnessLayer.Services
             }
         }
 
-        public bool Save(SubjectEF Subject, enMode Mode)
+        public bool Save(SubjectDTO Subject, enMode Mode)
         {
-            if (Subject is null)
-                throw new ArgumentNullException("Subject was null");
+            try
+            {
+                if (Subject == null)
+                    throw new ArgumentNullException("Subject was null");
 
-            if (string.IsNullOrEmpty(Subject.SubjectName))
-                throw new Exception("Name of subject was null");
+                if (string.IsNullOrEmpty(Subject.SubjectName))
+                    throw new Exception("Name of subject was null");
 
-            SemestersEF Semester = _DbContext.Semesters
-                .FirstOrDefault(s => s.ID == Subject.SemeseterID)!;
+                SemestersEF Semester = _DbContext.Semesters
+                    .FirstOrDefault(s => s.ID == Subject.SemesterId)!;
 
-            if (Semester is null)
-                throw new Exception($"There is no semester with {Subject.SemeseterID} ID");
+                if (Semester == null)
+                    throw new Exception($"There is no semester with {Subject.SemesterId} ID");
 
-            if (Duplicate(Subject.SubjectName))
-                throw new DuplicateWaitObjectException("Name of subject is already exist");
+                if (Duplicate(Subject.SubjectName) && Mode == enMode.AddNew)
+                    throw new DuplicateWaitObjectException("Name of subject is already exist");
 
-            _DbContext.Entry(Semester).State = EntityState.Unchanged;
+                _DbContext.Entry(Semester).State = EntityState.Unchanged;
 
-            _Subject.SubjectName = Subject.SubjectName;
-            _Subject.SemeseterID = Subject.SemeseterID;
-            _Subject.Semeseter = Semester;
+                SubjectEF Sub = SubjectMapper.ToEF(Subject);
+                Sub.Semeseter = Semester;
+                _DbContext.Entry(Sub).State = Mode == enMode.AddNew ? EntityState.Added : EntityState.Modified;
 
-            if (Mode == enMode.AddNew)
-                _DbContext.Subjects.Add(_Subject);
-            else if (Mode == enMode.Update)
-                _DbContext.Subjects.Update(_Subject);
-
-            return _DbContext.SaveChanges() > 0;
+                if (Mode == enMode.AddNew)
+                    _DbContext.Subjects.Add(Sub);
+                else if (Mode == enMode.Update)
+                    _DbContext.Subjects.Update(Sub);
+                return _DbContext.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

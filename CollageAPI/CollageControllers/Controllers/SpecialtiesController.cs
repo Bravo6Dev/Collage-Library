@@ -1,11 +1,13 @@
 ﻿using DataLayer.Entites;
 using DataLayer.Reposertory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client.Extensibility;
 
 namespace CollageControllers.Controllers
 {
+    [Authorize]
     [Route("Specialties")]
     [ApiController]
     public class SpecialtiesController : ControllerBase

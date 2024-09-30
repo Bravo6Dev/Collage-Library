@@ -1,4 +1,5 @@
-﻿using DataLayer.Entites;
+﻿using DataLayer.DTOs;
+using DataLayer.Entites;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,12 +11,12 @@ namespace DataLayer.Reposertory
 {
     public interface ISemesterRepo
     {
-        public bool Save(SemestersEF Semester, enMode Mode);
+        public bool Save(SemesterDTO Semester, enMode Mode);
         public bool Delete(int ID);
 
-        public IEnumerable<SemestersEF> GetAll();
-        public IEnumerable<SemestersEF> GetAll(int SpecialtyId);
+        public IEnumerable<SemesterDTO> GetAll();
+        public IEnumerable<SemesterDTO> GetAll(int SpecialtyId);
 
-        public SemestersEF GetById(int ID);
+        public SemesterDTO GetById(int ID);
     }
 }
